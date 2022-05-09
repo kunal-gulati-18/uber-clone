@@ -1,8 +1,9 @@
 import React from 'react';
 import tw from 'tailwind-styled-components';
+import Link from 'next/link';
 
 const ActionItemsWrapper = tw.div `
-  flex-1 px-5
+  flex-1 p-4
 `
 
 const ActionItemHeader = tw.div `
@@ -10,7 +11,7 @@ const ActionItemHeader = tw.div `
 `;
 
 const ActionItemHeading = tw.img `
-h-10
+h-28
 `;
 
 const ActionItemProfileSection = tw.div `
@@ -18,46 +19,64 @@ flex justify-between items-center gap-x-4
 `;
 
 const ActionItemProfileName = tw.span `
-text-xs font-semibold
+text-sm font-semibold
 `;
 
-const ActionItemProfilePicture = tw.span ``;
+const ActionItemProfilePicture = tw.span `
+
+`;
 
 const ActionItemsButtons = tw.div `
-flex gap-x-2 
+flex gap-x-3 text-xl
 `;
 
-const ActionItemsFooter = tw.div ``;
+const ActionButton = tw.button`
+bg-gray-200 flex flex-col flex-1 h-32 items-center justify-center rounded transition ease hover:bg-gray-100 hover:shadow-md hover:scale-105
+`;
+
+const ActionImage = tw.img`
+h-3/5
+`;
+
+const ActionItemsFooter = tw.div `
+h-20 text-2xl p-4 flex items-center justify-start mt-8
+`;
 
 const ActionItems = () => {
     return (
-        <ActionItemsWrapper className = "flex flex-col gap-y-6 ">
+        <ActionItemsWrapper className = "flex flex-col">
             <ActionItemHeader>
-                <ActionItemHeading src = "/assets/uberLogo.png"/>
+                <ActionItemHeading src = "https://i.ibb.co/84stgjq/uber-technologies-new-20218114.jpg"/>
                 <ActionItemProfileSection>
                     <ActionItemProfileName>
                         Kunal Gulati
                     </ActionItemProfileName>
                     <ActionItemProfilePicture>
-                        <img class="inline-block h-8 w-8 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+                        <img className="inline-block h-12 w-12 rounded-full ring-2 ring-white border-gray-200 p-px" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
                     </ActionItemProfilePicture>
                 </ActionItemProfileSection>
             </ActionItemHeader>
             <ActionItemsButtons>
-                <button className='bg-zinc-100 flex flex-col flex-1 h-24 items-center justify-center rounded'>
-                    <span></span>
-                    <span className='buttonText'>Ride</span>
-                </button>
-                <button className='bg-zinc-100 flex flex-col flex-1 h-24 items-center justify-center rounded'>
-                    <span></span>
-                    <span className='buttonText'>2-Wheels</span>
-                </button>
-                <button className='bg-zinc-100 flex flex-col flex-1 h-24 items-center justify-center rounded'>
-                    <span></span>
-                    <span className='buttonText'>Reserve</span>
-                </button>
+                <Link href = '/components/search-location'>
+                    <ActionButton>
+                        <ActionImage src = "https://i.ibb.co/cyvcpfF/uberx.png"/>
+                        <div className='buttonText'>Ride</div>
+                    </ActionButton>
+                </Link>
+                <Link href = '/components/search-location'>
+                    <ActionButton>
+                        <ActionImage src = "https://i.ibb.co/n776JLm/bike.png"/>
+                        <div className='buttonText'>2-Wheels</div>
+                    </ActionButton>
+                </Link>
+                <Link href = '/components/search-location'>
+                    <ActionButton>
+                        <ActionImage src = "https://i.ibb.co/5RjchBg/uberschedule.png"/>
+                        <div className='buttonText'>Reserve</div>
+                    </ActionButton>
+                </Link>        
             </ActionItemsButtons>
-			<ActionItemsFooter className = "bg-zinc-100 p-16">
+			<ActionItemsFooter className = "bg-gray-200">
 				Where to?
 			</ActionItemsFooter>
         </ActionItemsWrapper>
