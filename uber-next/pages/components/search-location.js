@@ -11,6 +11,15 @@ const SearchLocation = () => {
   const onChange = (e) => {
     setFields({ ...fields, [e.target.name]: e.target.value });
   };
+
+  const handleClick = () => {
+    if(!pickup || !destination) {
+
+    }
+
+    
+  }
+
   return (
     <SearchWrapper>
       <SearchHeaderWrapper>
@@ -69,7 +78,7 @@ const SearchLocation = () => {
           <span>Saved Places</span>
         </SavedPlacesWrapper>
         <ConfirmLocationButtonWrapper>
-          <ConfirmLocationButton>Confirm Locations</ConfirmLocationButton>
+          <ConfirmLocationButton onClick = {handleClick}>Confirm Locations</ConfirmLocationButton>
         </ConfirmLocationButtonWrapper>
       </SearchBodyWrapper>
     </SearchWrapper>
