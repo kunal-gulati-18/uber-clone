@@ -34,38 +34,65 @@ const ConfirmPage = () => {
     });
 
     const fetchData = async () => {
-        let pickupData = await axios.get(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${pickup}.json?access_token=pk.eyJ1Ijoia3VuYWxndWxhdGkwODE4IiwiYSI6ImNsMngyZWlxNjBybHkza2xibjJpY3NrbjEifQ.jph0u9y6XM4ySmoi0J-eGQ&limit=1`
-        );
-          console.log('pic', pickupData)
-        let destinationData = await axios.get(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${destination}.json?access_token=pk.eyJ1Ijoia3VuYWxndWxhdGkwODE4IiwiYSI6ImNsMngyZWlxNjBybHkza2xibjJpY3NrbjEifQ.jph0u9y6XM4ySmoi0J-eGQ&limit=1`
-        );
-        addToMap({ pickupData: pickupData?.data?.features?.length ?  pickupData?.data?.features[0]?.center : [], destinationData: destinationData?.data?.features?.length ? destinationData?.data?.features[0]?.center : [] });
-      };
+      let pickupData = await axios.get(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${pickup}.json?access_token=pk.eyJ1Ijoia3VuYWxndWxhdGkwODE4IiwiYSI6ImNsMngyZWlxNjBybHkza2xibjJpY3NrbjEifQ.jph0u9y6XM4ySmoi0J-eGQ&limit=1`
+      );
+      console.log("pic", pickupData);
+      let destinationData = await axios.get(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${destination}.json?access_token=pk.eyJ1Ijoia3VuYWxndWxhdGkwODE4IiwiYSI6ImNsMngyZWlxNjBybHkza2xibjJpY3NrbjEifQ.jph0u9y6XM4ySmoi0J-eGQ&limit=1`
+      );
+      addToMap({
+        pickupData: pickupData?.data?.features?.length
+          ? pickupData?.data?.features[0]?.center
+          : [],
+        destinationData: destinationData?.data?.features?.length
+          ? destinationData?.data?.features[0]?.center
+          : [],
+      });
 
-      fetchData();
+      map.current.fitBounds(
+        [
+          pickupData?.data?.features[0]?.center,
+          destinationData?.data?.features[0]?.center,
+        ],
+        {
+          padding: 60,
+        }
+      );
+    };
+
+    fetchData();
   }, [router.query]);
 
   const addToMap = ({ pickupData, destinationData }) => {
     const marker1 = new mapboxgl.Marker({
-        color: "green",
-        }).setLngLat(pickupData)
-        .addTo(map.current);
+      color: "green",
+    })
+      .setLngLat(pickupData)
+      .addTo(map.current);
 
     const marker2 = new mapboxgl.Marker({
-            color: "red",
-            }).setLngLat(destinationData)
-            .addTo(map.current);
-  }
+      color: "red",
+    })
+      .setLngLat(destinationData)
+      .addTo(map.current);
+  };
   return (
     <ConfirmPageWrapper>
+      <Link href="/components/search-location">
+        <BackButton>
+          <img
+            className="h-9 w-9"
+            src="https://img.icons8.com/ios-filled/50/000000/left.png"
+          />
+        </BackButton>
+      </Link>
       <MapWrapper ref={mapContainer} id="confirm-page-map-wrapper"></MapWrapper>
       <ShowRideWrapper>
         <MessageWrapper>Choose a ride, or swipe up for more</MessageWrapper>
         <CarRideWrapper>
           {carList.map((car) => (
-            <CarOptionsWrapper>
+            <CarOptionsWrapper key={car.service}>
               <CarWrapper>
                 <CarImage src={car.imgUrl} />
                 <CarLabelWrapper>
@@ -92,6 +119,10 @@ const ConfirmPageWrapper = tw.div`
 const MapWrapper = tw.div`
     flex-1
 
+`;
+
+const BackButton = tw.div`
+cursor-pointer w-max rounded-full p-1 transition hover:bg-gray-200 absolute z-10
 `;
 
 const ShowRideWrapper = tw.div`
