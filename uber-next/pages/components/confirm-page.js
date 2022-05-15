@@ -17,6 +17,10 @@ const ConfirmPage = () => {
   const [lng, setLng] = useState(77.261);
   const [lat, setLat] = useState(28.5354);
   const [zoom, setZoom] = useState(9);
+  const [coordinates, setCoordinates] = useState({
+    pickup: null,
+    dropoff: null
+  })
 
   useEffect(() => {
     const pickup = router?.query?.pickup;
@@ -38,10 +42,16 @@ const ConfirmPage = () => {
       let pickupData = await axios.get(
         `https://api.mapbox.com/geocoding/v5/mapbox.places/${pickup}.json?access_token=pk.eyJ1Ijoia3VuYWxndWxhdGkwODE4IiwiYSI6ImNsMngyZWlxNjBybHkza2xibjJpY3NrbjEifQ.jph0u9y6XM4ySmoi0J-eGQ&limit=1`
       );
-      console.log("pic", pickupData);
+
       let destinationData = await axios.get(
         `https://api.mapbox.com/geocoding/v5/mapbox.places/${destination}.json?access_token=pk.eyJ1Ijoia3VuYWxndWxhdGkwODE4IiwiYSI6ImNsMngyZWlxNjBybHkza2xibjJpY3NrbjEifQ.jph0u9y6XM4ySmoi0J-eGQ&limit=1`
       );
+
+      setCoordinates({
+        pickup: pickupData?.data?.features[0]?.center || null,
+        dropoff: destinationData?.data?.features[0]?.center || null
+      });
+
       addToMap({
         pickupData: pickupData?.data?.features?.length
           ? pickupData?.data?.features[0]?.center
@@ -91,7 +101,7 @@ const ConfirmPage = () => {
       <MapWrapper ref={mapContainer} id="confirm-page-map-wrapper"></MapWrapper>
       <ShowRideWrapper>
         <MessageWrapper>Choose a ride, or swipe up for more</MessageWrapper>
-        <CarList/>
+        <CarList coordinates = {coordinates}/>
       </ShowRideWrapper>
       <FooterWrapper>
         <ConfirmButton>Confirm uber</ConfirmButton>
@@ -119,38 +129,6 @@ const ShowRideWrapper = tw.div`
 
 const MessageWrapper = tw.div`
     border-b-2 border-slate-200 flex items-center justify-center text-sm text-slate-500 p-1
-`;
-
-const CarRideWrapper = tw.div`
-    flex flex-col p-4 gap-y-8 max-h-[80%] overflow-y-auto
-`;
-
-const CarOptionsWrapper = tw.div`
-    flex justify-between items-center
-`;
-
-const CarImage = tw.img`
-    flex items-center gap-x-2 h-12 w-12
-`;
-
-const CarWrapper = tw.div`
-    flex items-center gap-x-2
-`;
-
-const CarLabelWrapper = tw.div`
-flex flex-col
-`;
-
-const CarLabel = tw.div`
-text-sm font-medium
-`;
-
-const CarTimeWrapper = tw.div`
-text-xs text-sky-700
-`;
-
-const PriceWrapper = tw.div`
-    text-sm
 `;
 
 const FooterWrapper = tw.div`
