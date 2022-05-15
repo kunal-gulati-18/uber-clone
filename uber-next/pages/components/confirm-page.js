@@ -5,6 +5,7 @@ import mapboxgl from "mapbox-gl";
 import Link from "next/link";
 import axios from "axios";
 import { carList } from "../../public/assets/carList";
+import CarList from "./CarList";
 
 mapboxgl.accessToken =
   "pk.eyJ1Ijoia3VuYWxndWxhdGkwODE4IiwiYSI6ImNsMngyZWlxNjBybHkza2xibjJpY3NrbjEifQ.jph0u9y6XM4ySmoi0J-eGQ";
@@ -90,20 +91,7 @@ const ConfirmPage = () => {
       <MapWrapper ref={mapContainer} id="confirm-page-map-wrapper"></MapWrapper>
       <ShowRideWrapper>
         <MessageWrapper>Choose a ride, or swipe up for more</MessageWrapper>
-        <CarRideWrapper>
-          {carList.map((car) => (
-            <CarOptionsWrapper key={car.service}>
-              <CarWrapper>
-                <CarImage src={car.imgUrl} />
-                <CarLabelWrapper>
-                  <CarLabel>{car.service}</CarLabel>
-                  <CarTimeWrapper>5 min away</CarTimeWrapper>
-                </CarLabelWrapper>
-              </CarWrapper>
-              <PriceWrapper>${car.multiplier}</PriceWrapper>
-            </CarOptionsWrapper>
-          ))}
-        </CarRideWrapper>
+        <CarList/>
       </ShowRideWrapper>
       <FooterWrapper>
         <ConfirmButton>Confirm uber</ConfirmButton>
