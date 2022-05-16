@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import tw from 'tailwind-styled-components';
 import Link from 'next/link';
+import { useRouter } from  'next/router';
+import { auth, provider } from '../../firebase';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 
 const ActionItemsWrapper = tw.div `
   flex-1 p-4
@@ -43,16 +46,42 @@ h-20 text-2xl p-4 flex items-center justify-start mt-8
 `;
 
 const ActionItems = () => {
+    const [user, setUser] = useState(null);
+    const router = useRouter();
+    const onClick = () => {
+        signOut(auth)
+    }
+
+    useEffect(() => {
+        return () => {
+            onAuthStateChanged(auth, user => {
+                if(user) {
+                    setUser(
+                        {
+                            displayName: user.displayName,
+                            picture: user.photoURL
+                        } 
+                    )
+                    //router.push('/components/login')
+                }
+                else {
+                    setUser(null);
+                    router.push('/components/login')
+                }
+            })
+        }
+    }, []);
+
     return (
         <ActionItemsWrapper className = "flex flex-col">
             <ActionItemHeader>
                 <ActionItemHeading src = "https://i.ibb.co/84stgjq/uber-technologies-new-20218114.jpg"/>
                 <ActionItemProfileSection>
                     <ActionItemProfileName>
-                        Kunal Gulati
+                        {user?.displayName}
                     </ActionItemProfileName>
-                    <ActionItemProfilePicture>
-                        <img className="inline-block h-12 w-12 rounded-full ring-2 ring-white border-gray-200 p-px" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+                    <ActionItemProfilePicture onClick = {onClick}>
+                        <img className="inline-block h-12 w-12 rounded-full ring-2 ring-white border-gray-200 p-px" src={user?.picture || "#"} alt=""/>
                     </ActionItemProfilePicture>
                 </ActionItemProfileSection>
             </ActionItemHeader>
